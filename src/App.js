@@ -21,6 +21,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignInScreen from "./screens/SignInScreen";
 import HomeScreen from "./screens/HomeScreen";
+import MovieScreen from "./screens/MovieScreen";
 
 const drawerWidth = 240;
 
@@ -169,7 +170,8 @@ export default function App() {
           <DrawerHeader />
           <Routes>
             <Route path="/" element={<SignInScreen />}></Route>
-            <Route path="/home" element={<HomeScreen />}></Route>
+            <Route path="/movies" element={<HomeScreen />}></Route>
+            <Route path="/movies/:id" element={<MovieScreen />}></Route>
           </Routes>
         </Main>
       </Box>

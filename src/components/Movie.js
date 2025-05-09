@@ -4,22 +4,29 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { Link } from "react-router-dom";
 
 export default function Movie(props) {
   const { movie } = props;
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardMedia sx={{ height: 140 }} image={movie.image} title={movie.title} />
+      <CardMedia
+        sx={{ height: 140 }}
+        image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+        title={movie.title}
+      />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {movie.title}
         </Typography>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          {movie.releaseDate}
+          {movie.release_date}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">More</Button>
+        <Link to={`/movies/${movie.id}`}>
+          <Button size="small">More</Button>
+        </Link>
       </CardActions>
     </Card>
   );
