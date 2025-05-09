@@ -1,6 +1,8 @@
 import { Container } from "@mui/material";
 import { useEffect, useReducer } from "react";
 import axios from "axios";
+import LoadingBox from "../components/LoadingBox";
+import MessageBox from "../components/MessageBox";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -33,5 +35,16 @@ export default function HomeScreen() {
     };
     fetchData();
   }, []);
-  return <Container></Container>;
+
+  return (
+    <Container>
+      {loading ? (
+        <LoadingBox />
+      ) : error ? (
+        <MessageBox variant="error">{error}</MessageBox>
+      ) : (
+        <div></div>
+      )}
+    </Container>
+  );
 }
