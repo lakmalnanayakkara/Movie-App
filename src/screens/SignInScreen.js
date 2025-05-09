@@ -58,7 +58,7 @@ export default function SignInScreen() {
 
     if (!Object.values(formErrors).some((error) => error)) {
       console.log("Form submitted:", formValues);
-      navigate("/home");
+      navigate("/movies");
     }
   };
 

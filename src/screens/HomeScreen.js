@@ -1,8 +1,9 @@
 import { Container } from "@mui/material";
 import { useEffect, useReducer } from "react";
-import axios from "axios";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
+import Movie from "../components/Movie";
+import tmdbApi from "../api/TmdbApi";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -25,10 +26,11 @@ export default function HomeScreen() {
   });
   useEffect(() => {
     const fetchData = async () => {
+      const params = {};
       dispatch({ type: "FETCH_REQUEST" });
       try {
-        const result = await axios.get("/api/products");
-        dispatch({ type: "FETCH_SUCCESS", payload: result.data });
+        const result = await tmdbApi.getMoviesList({ params });
+        dispatch({ type: "FETCH_SUCCESS", payload: result.results });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: err.message });
       }
@@ -41,9 +43,13 @@ export default function HomeScreen() {
       {loading ? (
         <LoadingBox />
       ) : error ? (
-        <MessageBox variant="error">{error}</MessageBox>
+        <MessageBox severity="error">{error}</MessageBox>
       ) : (
-        <div></div>
+        <div>
+          {movies.map((movie) => (
+            <Movie movie={movie} />
+          ))}
+        </div>
       )}
     </Container>
   );
