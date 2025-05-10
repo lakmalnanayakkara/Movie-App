@@ -12,12 +12,14 @@ import {
   List,
   ListItem,
   ListItemText,
+  Rating,
   Stack,
   Typography,
 } from "@mui/material";
 import CastList from "../components/CastList";
 import VideoList from "../components/VideoList";
 import MovieList from "../components/MovieList";
+import roundNumber from "./../components/Util";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -128,6 +130,15 @@ export default function MovieScreen() {
                         ))}
                       </Box>
                     </ListItem>
+                    <ListItem>
+                      <Rating
+                        name="half-rating-read"
+                        defaultValue={roundNumber(movie.vote_average)}
+                        precision={0.5}
+                        max={10}
+                        readOnly
+                      />
+                    </ListItem>
                   </List>
                 </Box>
                 <Box sx={{ width: "100%" }}>
@@ -145,12 +156,12 @@ export default function MovieScreen() {
               </Stack>
             </Grid>
           </Grid>
-          <Box sx={{ display: "flex", width: "100%", mt: 4 }}>
+          <Box sx={{ width: "100%", mt: 4 }}>
             <VideoList id={movie.id} />
           </Box>
-          <Box sx={{ display: "flex", width: "100%", mt: 4 }}>
+          {/* <Box sx={{ display: "flex", width: "100%", mt: 4 }}>
             <MovieList id={movie.id}></MovieList>
-          </Box>
+          </Box> */}
         </>
       )}
     </Container>
