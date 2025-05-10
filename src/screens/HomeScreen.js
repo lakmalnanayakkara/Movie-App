@@ -1,9 +1,10 @@
-import { Container } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import { useEffect, useReducer } from "react";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import Movie from "../components/Movie";
 import tmdbApi from "../api/TmdbApi";
+import { Helmet } from "react-helmet-async";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -45,11 +46,25 @@ export default function HomeScreen() {
       ) : error ? (
         <MessageBox severity="error">{error}</MessageBox>
       ) : (
-        <div>
-          {movies.map((movie) => (
-            <Movie movie={movie} />
-          ))}
-        </div>
+        <>
+          <Helmet>
+            <title>THEATER | Home</title>
+          </Helmet>
+          <Typography variant="h3" component="h1" gutterBottom>
+            Featured Movies
+          </Typography>
+          <Grid
+            container
+            spacing={2}
+            sx={{ display: "flex", flexDirection: "row" }}
+          >
+            {movies.map((movie) => (
+              <Grid item key={movie.id} size={{ xs: 12, sm: 3, md: 3 }}>
+                <Movie movie={movie} />
+              </Grid>
+            ))}
+          </Grid>
+        </>
       )}
     </Container>
   );

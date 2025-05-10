@@ -1,7 +1,7 @@
-.banner {
-  height: 50vh;
-  position: relative;
-  background-position: center;
+.cast-img {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  padding-top: 160px;
   background-size: cover;
-  background-repeat: no-repeat;
+  margin-bottom: 0.5rem;
 }
