@@ -1,5 +1,5 @@
-import { Container, Grid, Typography } from "@mui/material";
-import { useEffect, useReducer } from "react";
+import { Button, Container, Grid, Typography } from "@mui/material";
+import { useEffect, useReducer, useState } from "react";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import Movie from "../components/Movie";
@@ -11,7 +11,11 @@ const reducer = (state, action) => {
     case "FETCH_REQUEST":
       return { ...state, loading: true };
     case "FETCH_SUCCESS":
-      return { ...state, movies: action.payload, loading: false };
+      return {
+        ...state,
+        movies: [...state.movies, ...action.payload],
+        loading: false,
+      };
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
     default:
@@ -25,19 +29,23 @@ export default function HomeScreen() {
     loading: true,
     error: "",
   });
+  const [page, setPage] = useState(1);
   useEffect(() => {
     const fetchData = async () => {
-      const params = {};
+      const params = {
+        page: page,
+      };
       dispatch({ type: "FETCH_REQUEST" });
       try {
         const result = await tmdbApi.getMoviesList({ params });
         dispatch({ type: "FETCH_SUCCESS", payload: result.results });
+        console.log(result);
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: err.message });
       }
     };
     fetchData();
-  }, []);
+  }, [page]);
 
   return (
     <Container>
@@ -59,11 +67,19 @@ export default function HomeScreen() {
             sx={{ display: "flex", flexDirection: "row" }}
           >
             {movies.map((movie) => (
-              <Grid item key={movie.id} size={{ xs: 12, sm: 3, md: 3 }}>
+              <Grid item key={movie.title} size={{ xs: 12, sm: 3, md: 3 }}>
                 <Movie movie={movie} />
               </Grid>
             ))}
           </Grid>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setPage(page + 1);
+            }}
+          >
+            Lord More
+          </Button>
         </>
       )}
     </Container>
