@@ -58,7 +58,7 @@ export default function MovieScreen() {
   }, [id]);
 
   return (
-    <Container>
+    <Container sx={{ padding: 0 }}>
       {loading ? (
         <LoadingBox />
       ) : error ? (
