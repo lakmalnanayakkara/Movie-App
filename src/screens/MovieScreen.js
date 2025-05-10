@@ -159,7 +159,7 @@ export default function MovieScreen() {
           <Box sx={{ width: "100%", mt: 4 }}>
             <VideoList id={movie.id} />
           </Box>
-          {/* <Box sx={{ display: "flex", width: "100%", mt: 4 }}>
+          {/* <Box sx={{ width: "100%", mt: 4 }}>
             <MovieList id={movie.id}></MovieList>
           </Box> */}
         </>
