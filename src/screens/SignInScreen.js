@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 export default function SignInScreen() {
   const navigate = useNavigate();
@@ -73,6 +74,9 @@ export default function SignInScreen() {
 
   return (
     <Container className="d-flex flex-wrap flex-row w-100 align-items-center justify-content-center mt-4">
+      <Helmet>
+        <title>THEATER | Sign In</title>
+      </Helmet>
       <Box className="d-flex flex-column col-md-6 align-items-center">
         <Typography variant="h3">Sign In</Typography>
         <form className="d-flex flex-column w-100" onSubmit={handleSubmit}>

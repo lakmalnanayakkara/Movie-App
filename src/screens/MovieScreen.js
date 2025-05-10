@@ -4,7 +4,20 @@ import tmdbApi from "../api/TmdbApi";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import apiConfig from "../api/ApiConfig";
-import { Container } from "@mui/material";
+import { Helmet } from "react-helmet-async";
+import {
+  Box,
+  Container,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  Stack,
+  Typography,
+} from "@mui/material";
+import CastList from "../components/CastList";
+import VideoList from "../components/VideoList";
+import MovieList from "../components/MovieList";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -43,24 +56,103 @@ export default function MovieScreen() {
   }, [id]);
 
   return (
-    <>
+    <Container>
       {loading ? (
         <LoadingBox />
       ) : error ? (
         <MessageBox severity="error">{error}</MessageBox>
       ) : (
         <>
-          <div
-            className="banner"
-            style={{
-              backgroundImage: `url(${apiConfig.originalImage(
-                movie.backdrop_path || movie.poster_path
-              )})`,
-            }}
-          ></div>
-          <Container></Container>
+          <Helmet>
+            <title>THEATER | {movie.title}</title>
+          </Helmet>
+          <Grid
+            container
+            sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}
+          >
+            <Grid size={{ xs: 12, sm: 6, md: 6 }}>
+              <img
+                src={apiConfig.w500Image(movie.poster_path)}
+                alt="img"
+                style={{ borderRadius: 20, width: "100%", height: "auto" }}
+              />
+            </Grid>
+            <Grid
+              size={{ xs: 12, sm: 12, md: 6 }}
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
+              <Stack direction="column">
+                <Box sx={{ width: "100%" }}>
+                  <List>
+                    <ListItem>
+                      <ListItemText>
+                        <Typography variant="h2" component="h2">
+                          {movie.title}
+                        </Typography>
+                        <Typography
+                          variant="h4"
+                          component="h2"
+                          sx={{ fontStyle: "italic" }}
+                        >
+                          {movie.tagline}
+                        </Typography>
+                      </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText>
+                        <Typography variant="p" component="p">
+                          {movie.overview}
+                        </Typography>
+                      </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                        {movie.genres.map((item, i) => (
+                          <Box
+                            key={i}
+                            sx={{
+                              padding: "6px 14px",
+                              backgroundColor: "#333",
+                              color: "#fff",
+                              borderRadius: "16px",
+                              fontSize: "14px",
+                              fontWeight: 500,
+                            }}
+                          >
+                            {item.name}
+                          </Box>
+                        ))}
+                      </Box>
+                    </ListItem>
+                  </List>
+                </Box>
+                <Box sx={{ width: "100%" }}>
+                  <Grid xs={12}>
+                    <ListItem>
+                      <ListItemText>
+                        <Typography variant="h4" component="h2">
+                          Casts
+                        </Typography>
+                      </ListItemText>
+                    </ListItem>
+                    <CastList id={movie.id} />
+                  </Grid>
+                </Box>
+              </Stack>
+            </Grid>
+          </Grid>
+          <Box sx={{ display: "flex", width: "100%", mt: 4 }}>
+            <VideoList id={movie.id} />
+          </Box>
+          <Box sx={{ display: "flex", width: "100%", mt: 4 }}>
+            <MovieList id={movie.id}></MovieList>
+          </Box>
         </>
       )}
-    </>
+    </Container>
   );
 }
