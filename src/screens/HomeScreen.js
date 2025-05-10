@@ -73,6 +73,7 @@ export default function HomeScreen() {
             ))}
           </Grid>
           <Button
+            sx={{ mt: 3 }}
             variant="contained"
             onClick={() => {
               setPage(page + 1);

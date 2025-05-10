@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import tmdbApi from "../api/TmdbApi";
 import Movie from "./Movie";
-import { Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
+import { SwiperSlide, Swiper } from "swiper/react";
 
 export default function MovieList(props) {
   const { id } = props;
-  const [similaMovies, setSimilarMovies] = useState([]);
+  const [similarMovies, setSimilarMovies] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       const result = await tmdbApi.similar(id);
@@ -14,21 +15,14 @@ export default function MovieList(props) {
     fetchData();
   }, [id]);
   return (
-    <Box sx={{ overflowX: "auto", padding: 2 }}>
-      <Grid container spacing={2} wrap="nowrap">
-        {similaMovies.map((item, i) => (
-          <Grid
-            item
-            key={i}
-            sx={{
-              flex: "0 0 auto",
-              width: { xs: "40%", sm: "30%", md: "15%" },
-            }}
-          >
+    <Box sx={{ width: "100%" }}>
+      <Swiper grabCursor={true} spaceBetween={10} slidesPerView={"auto"}>
+        {similarMovies.map((item, i) => (
+          <SwiperSlide key={i}>
             <Movie movie={item} />
-          </Grid>
+          </SwiperSlide>
         ))}
-      </Grid>
+      </Swiper>
     </Box>
   );
 }

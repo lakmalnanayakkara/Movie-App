@@ -11,7 +11,7 @@ const tmdbApi = {
     return axiosClient.get(url, { params: {} });
   },
   search: (params) => {
-    const url = "search/movie";
+    const url = "discover/movie";
     return axiosClient.get(url, params);
   },
   detail: (id, params) => {
@@ -24,6 +24,10 @@ const tmdbApi = {
   },
   similar: (id) => {
     const url = "movie/" + id + "/similar";
+    return axiosClient.get(url, { params: {} });
+  },
+  getGenres: () => {
+    const url = "genre/movie/list";
     return axiosClient.get(url, { params: {} });
   },
 };
