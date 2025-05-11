@@ -18,7 +18,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import SignInScreen from "./screens/SignInScreen";
 import HomeScreen from "./screens/HomeScreen";
 import MovieScreen from "./screens/MovieScreen";
@@ -28,6 +28,7 @@ import SearchMoviesScreen from "./screens/SearchMoviesScreen";
 import { useContext } from "react";
 import { Store } from "./components/Store";
 import UserMenu from "./components/UserMenu";
+import FavMoviesScreen from "./screens/FavMoviesScreen";
 
 const drawerWidth = 240;
 
@@ -129,9 +130,14 @@ export default function App() {
             </IconButton>
           )}
 
-          <Typography variant="h6" noWrap component="div">
-            THEATER
-          </Typography>
+          <Link
+            to={"/movies"}
+            style={{ textDecoration: "none", color: "white" }}
+          >
+            <Typography variant="h6" noWrap component="div">
+              THEATER
+            </Typography>
+          </Link>
           {!isMobile && (
             <>
               {state.userInfo && (
@@ -195,15 +201,21 @@ export default function App() {
           </>
         )}
         <List>
-          {["Favorites"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
+          {["movies", "favorites"].map((text, index) => (
+            <Link
+              to={`/${text}`}
+              style={{ textDecoration: "none", color: "grey" }}
+              key={text}
+            >
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItemButton>
+              </ListItem>
+            </Link>
           ))}
         </List>
       </Drawer>
@@ -214,6 +226,7 @@ export default function App() {
           <Route path="/movies" element={<HomeScreen />}></Route>
           <Route path="/movies/:id" element={<MovieScreen />}></Route>
           <Route path="/search" element={<SearchMoviesScreen />} />
+          <Route path="/favorites" element={<FavMoviesScreen />} />
         </Routes>
       </Main>
     </Box>

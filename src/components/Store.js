@@ -6,6 +6,10 @@ const initialState = {
   userInfo: localStorage.getItem("userInfo")
     ? JSON.parse(localStorage.getItem("userInfo"))
     : null,
+
+  savedMovies: localStorage.getItem("savedMovies")
+    ? JSON.parse(localStorage.getItem("savedMovies"))
+    : [],
 };
 
 function reducer(state, action) {
@@ -16,6 +20,17 @@ function reducer(state, action) {
       return {
         userInfo: null,
       };
+    case "SAVE_MOVIE":
+      const newMovie = action.payload;
+      const newFavMovies = [...state.savedMovies, newMovie];
+      localStorage.setItem("savedMovies", JSON.stringify(newFavMovies));
+      return { ...state, savedMovies: newFavMovies };
+    case "UNSAVE_MOVIE":
+      const movies = state.savedMovies.filter(
+        (item) => item.id !== action.payload.id
+      );
+      localStorage.setItem("savedMovies", JSON.stringify(movies));
+      return { ...state, savedMovies: movies };
     default:
       return state;
   }
