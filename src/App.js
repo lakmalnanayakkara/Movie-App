@@ -180,25 +180,22 @@ export default function App() {
             <Box sx={{ px: 2, pb: 1, ml: 2 }}>
               <SearchBox />
             </Box>
-            <Box sx={{ px: 2, pb: 2 }}>{signInButton}</Box>
+            <Box sx={{ px: 2, pb: 2 }}>
+              {state.userInfo ? (
+                <>
+                  <Box sx={{ ml: 2 }}>
+                    <UserMenu username={state.userInfo.username} />
+                  </Box>
+                </>
+              ) : (
+                signInButton
+              )}
+            </Box>
             <Divider />
           </>
         )}
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
+          {["Favorites"].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
