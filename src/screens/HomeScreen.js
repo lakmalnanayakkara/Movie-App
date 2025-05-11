@@ -5,6 +5,9 @@ import MessageBox from "../components/MessageBox";
 import Movie from "../components/Movie";
 import tmdbApi from "../api/TmdbApi";
 import { Helmet } from "react-helmet-async";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Store } from "../components/Store";
+import { useContext } from "react";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -24,6 +27,12 @@ const reducer = (state, action) => {
 };
 
 export default function HomeScreen() {
+  const navigate = useNavigate();
+  const { search } = useLocation();
+  const redirectInUrl = new URLSearchParams(search).get("redirect");
+  const redirect = redirectInUrl ? redirectInUrl : "/";
+  const { state } = useContext(Store);
+  const { userInfo } = state;
   const [{ loading, error, movies }, dispatch] = useReducer(reducer, {
     movies: [],
     loading: true,
@@ -39,13 +48,18 @@ export default function HomeScreen() {
       try {
         const result = await tmdbApi.getMoviesList({ params });
         dispatch({ type: "FETCH_SUCCESS", payload: result.results });
-        console.log(result);
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: err.message });
       }
     };
     fetchData();
   }, [page]);
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate(redirect);
+    }
+  }, [navigate, redirect, userInfo]);
 
   return (
     <Container>

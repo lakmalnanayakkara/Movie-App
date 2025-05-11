@@ -25,6 +25,9 @@ import MovieScreen from "./screens/MovieScreen";
 import { Button, useMediaQuery } from "@mui/material";
 import SearchBox from "./components/SearchBox";
 import SearchMoviesScreen from "./screens/SearchMoviesScreen";
+import { useContext } from "react";
+import { Store } from "./components/Store";
+import UserMenu from "./components/UserMenu";
 
 const drawerWidth = 240;
 
@@ -96,6 +99,8 @@ export default function App() {
   const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const { state } = useContext(Store);
+
   const signInButton = (
     <Button
       variant="outlined"
@@ -112,29 +117,37 @@ export default function App() {
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={[
-              {
-                mr: 2,
-              },
-              open && { display: "none" },
-            ]}
-          >
-            <MenuIcon />
-          </IconButton>
+          {state.userInfo && !open && (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+
           <Typography variant="h6" noWrap component="div">
             THEATER
           </Typography>
           {!isMobile && (
             <>
-              <Box sx={{ width: 300, ml: 2 }}>
-                <SearchBox />
-              </Box>
-              {signInButton}
+              {state.userInfo && (
+                <Box sx={{ width: 300, ml: 2 }}>
+                  <SearchBox />
+                </Box>
+              )}
+              {state.userInfo ? (
+                <>
+                  <Box sx={{ ml: 2 }}>
+                    <UserMenu username={state.userInfo.username} />
+                  </Box>
+                </>
+              ) : (
+                signInButton
+              )}
             </>
           )}
         </Toolbar>
