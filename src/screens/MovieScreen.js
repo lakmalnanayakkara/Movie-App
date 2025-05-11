@@ -18,7 +18,6 @@ import {
 } from "@mui/material";
 import CastList from "../components/CastList";
 import VideoList from "../components/VideoList";
-import MovieList from "../components/MovieList";
 import roundNumber from "./../components/Util";
 
 const reducer = (state, action) => {

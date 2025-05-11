@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { Store } from "../components/Store";
 
 export default function SignInScreen() {
   const navigate = useNavigate();
+  const { search } = useLocation();
+  const redirectInUrl = new URLSearchParams(search).get("redirect");
+  const redirect = redirectInUrl ? redirectInUrl : "/";
   const [formValues, setFormValues] = useState({ username: "", password: "" });
   const [formErrors, setFormErrors] = useState({ username: "", password: "" });
   const [touched, setTouched] = useState({ username: false, password: false });
+
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { userInfo } = state;
 
   const validateField = (name, value) => {
     let error = "";
@@ -36,7 +43,6 @@ export default function SignInScreen() {
     setFormValues((prev) => ({ ...prev, [name]: value }));
 
     if (touched[name]) {
-      console.log("checked");
       validateField(name, value);
     }
   };
@@ -57,8 +63,10 @@ export default function SignInScreen() {
     });
     setTouched(allTouched);
 
+    ctxDispatch({ type: "USER_SIGNIN", payload: formValues });
+    localStorage.setItem("userInfo", JSON.stringify(formValues));
+
     if (!Object.values(formErrors).some((error) => error)) {
-      console.log("Form submitted:", formValues);
       navigate("/movies");
     }
   };
@@ -71,6 +79,12 @@ export default function SignInScreen() {
       !formErrors.password
     );
   };
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate(redirect);
+    }
+  }, [navigate, redirect, userInfo]);
 
   return (
     <Container className="d-flex flex-wrap flex-row w-100 align-items-center justify-content-center mt-4">
